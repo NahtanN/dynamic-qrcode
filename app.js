@@ -92,8 +92,8 @@ async function checkTOTP() {
   const isValid = await validateTOTP(totpSecret, userCode);
   console.log(isValid);
   document.getElementById("totp-result").innerText = isValid
-    ? "✅ Code is valid!"
-    : "❌ Invalid code.";
+    ? "✅ Codigo valido!"
+    : "❌ Codigo invalido.";
 }
 
 document.getElementById("generate-qr-btn").addEventListener("click", () => {
