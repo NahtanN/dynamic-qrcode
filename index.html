@@ -7,17 +7,18 @@
     <style>
       body {
         display: flex;
-        justify-content: space-around;
+        justify-content: center;
+        flex-wrap: wrap;
         align-items: flex-start;
         height: 100vh;
         font-family: Arial, sans-serif;
         margin: 0;
         padding: 20px;
         background-color: #f5f5f5;
+        gap: 20px;
       }
 
-      .section {
-        width: 45%;
+      .wrapper {
         padding: 20px;
         background-color: white;
         border-radius: 10px;
@@ -30,10 +31,27 @@
       }
 
       input,
-      button {
+      button,
+      video {
         width: 80%;
         padding: 10px;
         margin: 10px 0;
+      }
+
+      .video-button {
+        cursor: pointer;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+      }
+
+      #startButton {
+        background-color: #28a745;
+      }
+
+      #resetButton {
+        background-color: #dc3545;
       }
 
       img {
@@ -49,8 +67,7 @@
   </head>
 
   <body>
-    <!-- TOTP Section -->
-    <div class="section">
+    <section class="wrapper">
       <h2>TOTP Generator & Validator</h2>
       <input type="text" id="totp-username" placeholder="Enter username" />
       <button id="generate-secret-btn">Generate Secret</button>
@@ -66,17 +83,52 @@
       />
       <button id="validate-totp-btn" disabled>Validate TOTP</button>
       <div id="totp-result"></div>
-    </div>
+    </section>
 
-    <!-- QR Code Section -->
-    <div class="section">
+    <section class="wrapper">
       <h2>Dynamic QR Code Generator</h2>
       <input type="text" id="qr-username" placeholder="Enter username" />
       <button id="generate-qr-btn">Generate QR Code</button>
       <div id="qr-code-container"></div>
       <div id="qr-result"></div>
-    </div>
+    </section>
 
+    <section class="wrapper" id="demo-content">
+      <div>
+        <a class="video-button" id="startButton">Start</a>
+        <a class="video-button" id="resetButton">Reset</a>
+      </div>
+
+      <div>
+        <video
+          id="video"
+          width="300"
+          height="200"
+          style="border: 1px solid gray; border-radius: 10px"
+        ></video>
+      </div>
+
+      <div id="sourceSelectPanel" style="display: none">
+        <label for="sourceSelect">Change video source:</label>
+        <select id="sourceSelect" style="max-width: 400px"></select>
+      </div>
+
+      <div style="display: table">
+        <label for="decoding-style"> Decoding Style:</label>
+        <select id="decoding-style" size="1">
+          <option value="once">Decode once</option>
+          <option value="continuously">Decode continuously</option>
+        </select>
+      </div>
+
+      <label>Result:</label>
+      <pre><code id="result"></code></pre>
+    </section>
+
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/@zxing/library@latest"
+    ></script>
     <script src="app.js"></script>
   </body>
 </html>
