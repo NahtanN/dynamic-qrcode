@@ -68,35 +68,39 @@
 
   <body>
     <section class="wrapper">
-      <h2>TOTP Generator & Validator</h2>
-      <input type="text" id="totp-username" placeholder="Enter username" />
-      <button id="generate-secret-btn">Generate Secret</button>
+      <h2>Gerador e Validador de TOTP</h2>
+      <input
+        type="text"
+        id="totp-username"
+        placeholder="Adicione um username"
+      />
+      <button id="generate-secret-btn">Gerar uma chave</button>
       <div id="totp-secret-display"></div>
 
-      <button id="generate-totp-btn" disabled>Generate TOTP Code</button>
+      <button id="generate-totp-btn" disabled>Gerar codigo TOTP</button>
       <div id="totp-code-display"></div>
 
       <input
         type="text"
         id="totp-input"
-        placeholder="Enter TOTP code to validate"
+        placeholder="Insira o TOTP para validação"
       />
-      <button id="validate-totp-btn" disabled>Validate TOTP</button>
+      <button id="validate-totp-btn" disabled>Validar codigo TOTP</button>
       <div id="totp-result"></div>
     </section>
 
     <section class="wrapper">
-      <h2>Dynamic QR Code Generator</h2>
-      <input type="text" id="qr-username" placeholder="Enter username" />
-      <button id="generate-qr-btn">Generate QR Code</button>
+      <h2>Gerador de QR Code Dinamicos</h2>
+      <input type="text" id="qr-username" placeholder="Adicione um username" />
+      <button id="generate-qr-btn">Gerar QR Code</button>
       <div id="qr-code-container"></div>
       <div id="qr-result"></div>
     </section>
 
     <section class="wrapper" id="demo-content">
       <div>
-        <a class="video-button" id="startButton">Start</a>
-        <a class="video-button" id="resetButton">Reset</a>
+        <a class="video-button" id="startButton">Iniciar</a>
+        <a class="video-button" id="resetButton">Reiniciar</a>
       </div>
 
       <div>
@@ -109,7 +113,7 @@
       </div>
 
       <div id="sourceSelectPanel" style="display: none">
-        <label for="sourceSelect">Change video source:</label>
+        <label for="sourceSelect">Video source:</label>
         <select id="sourceSelect" style="max-width: 400px"></select>
       </div>
 
@@ -121,7 +125,7 @@
         </select>
       </div>
 
-      <label>Result:</label>
+      <label>Resultado:</label>
       <pre><code id="result"></code></pre>
     </section>
 

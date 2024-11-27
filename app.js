@@ -7,7 +7,7 @@ document.getElementById("generate-secret-btn").addEventListener("click", () => {
     return;
   }
 
-  totpSecret = btoa(username + Date.now()).substring(0, 16); // Basic encoding for demo purposes
+  totpSecret = btoa(username + Date.now()).substring(0, 16);
   document.getElementById("totp-secret-display").innerText =
     `Secret: ${totpSecret}`;
   document.getElementById("generate-totp-btn").disabled = false;
@@ -79,7 +79,7 @@ function decodeContinuously(codeReader, selectedDeviceId) {
       if (result) {
         // properly decoded qr code
         console.log("Found QR code!", result);
-        document.getElementById("result").textContent = result.text;
+        document.getElementById("result").textContent = JSON.parse(result.text);
       }
 
       if (err) {
