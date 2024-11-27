@@ -79,7 +79,7 @@ function decodeContinuously(codeReader, selectedDeviceId) {
       if (result) {
         // properly decoded qr code
         console.log("Found QR code!", result);
-        document.getElementById("result").textContent = JSON.parse(result.text);
+        document.getElementById("result").textContent = result.text;
       }
 
       if (err) {
