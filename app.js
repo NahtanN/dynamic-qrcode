@@ -1,3 +1,65 @@
+function base32ToBinary(base32) {
+  const base32chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+  let binary = "";
+
+  for (let i = 0; i < base32.length; i++) {
+    const val = base32chars.indexOf(base32.charAt(i).toUpperCase());
+    binary += val.toString(2).padStart(5, "0");
+  }
+
+  const bytes = [];
+  for (let i = 0; i < binary.length; i += 8) {
+    bytes.push(parseInt(binary.substr(i, 8), 2));
+  }
+
+  return new Uint8Array(bytes);
+}
+
+// Generate HMAC-SHA1 hash
+async function hmacSha1(key, counter) {
+  const encoder = new TextEncoder();
+  const keyBytes = key instanceof Uint8Array ? key : encoder.encode(key);
+
+  const counterBuffer = new ArrayBuffer(8);
+  const counterView = new DataView(counterBuffer);
+  counterView.setBigUint64(0, BigInt(counter));
+
+  const cryptoKey = await crypto.subtle.importKey(
+    "raw",
+    keyBytes,
+    { name: "HMAC", hash: { name: "SHA-1" } },
+    false,
+    ["sign"],
+  );
+
+  return new Uint8Array(
+    await crypto.subtle.sign("HMAC", cryptoKey, counterBuffer),
+  );
+}
+
+// Generate TOTP code
+async function generateTOTP(secret, window = 0, step = 10, digits = 6) {
+  const key = base32ToBinary(secret);
+  const time = Math.floor(Date.now() / 1000 / step) + window; // Current time interval
+
+  const hmac = await hmacSha1(key, time);
+  const offset = hmac[hmac.length - 1] & 0xf;
+  const binary =
+    ((hmac[offset] & 0x7f) << 24) |
+    ((hmac[offset + 1] & 0xff) << 16) |
+    ((hmac[offset + 2] & 0xff) << 8) |
+    (hmac[offset + 3] & 0xff);
+
+  const otp = binary % Math.pow(10, digits);
+  return otp.toString().padStart(digits, "0");
+}
+
+// Validate TOTP code
+async function validateTOTP(secret, userCode, step = 10, digits = 6) {
+  const code = await generateTOTP(secret, 0, step, digits);
+  return code === userCode;
+}
+
 let totpSecret = "";
 
 document.getElementById("generate-secret-btn").addEventListener("click", () => {
@@ -14,26 +76,25 @@ document.getElementById("generate-secret-btn").addEventListener("click", () => {
   document.getElementById("validate-totp-btn").disabled = false;
 });
 
-// Generate a mock TOTP code
-document.getElementById("generate-totp-btn").addEventListener("click", () => {
+async function displayTOTP() {
+  console.log("here");
   if (!totpSecret) return;
-  const totpCode = (Math.floor(Math.random() * 900000) + 100000).toString(); // Mock 6-digit code
+  const totpCode = await generateTOTP(totpSecret);
+  console.log(totpCode);
   document.getElementById("totp-code-display").innerText =
     `TOTP Code: ${totpCode}`;
-  sessionStorage.setItem("totpCode", totpCode); // Store for validation
-});
+}
 
-// Validate TOTP Code
-document.getElementById("validate-totp-btn").addEventListener("click", () => {
-  const userCode = document.getElementById("totp-input").value.trim();
-  const storedCode = sessionStorage.getItem("totpCode");
+async function checkTOTP() {
+  const userCode = document.getElementById("totp-input").value;
+  if (!userCode) return;
 
-  if (userCode === storedCode) {
-    document.getElementById("totp-result").innerText = "✅ Code is valid!";
-  } else {
-    document.getElementById("totp-result").innerText = "❌ Invalid code.";
-  }
-});
+  const isValid = await validateTOTP(totpSecret, userCode);
+  console.log(isValid);
+  document.getElementById("totp-result").innerText = isValid
+    ? "✅ Code is valid!"
+    : "❌ Invalid code.";
+}
 
 document.getElementById("generate-qr-btn").addEventListener("click", () => {
   const username = document.getElementById("qr-username").value.trim();

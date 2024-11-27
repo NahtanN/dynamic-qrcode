@@ -77,7 +77,9 @@
       <button id="generate-secret-btn">Gerar uma chave</button>
       <div id="totp-secret-display"></div>
 
-      <button id="generate-totp-btn" disabled>Gerar codigo TOTP</button>
+      <button id="generate-totp-btn" disabled onclick="displayTOTP()">
+        Gerar codigo TOTP
+      </button>
       <div id="totp-code-display"></div>
 
       <input
@@ -85,7 +87,9 @@
         id="totp-input"
         placeholder="Insira o TOTP para validação"
       />
-      <button id="validate-totp-btn" disabled>Validar codigo TOTP</button>
+      <button id="validate-totp-btn" disabled onclick="checkTOTP()">
+        Validar codigo TOTP
+      </button>
       <div id="totp-result"></div>
     </section>
 
