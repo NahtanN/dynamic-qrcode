@@ -62,19 +62,19 @@ async function validateTOTP(secret, userCode, step = 10, digits = 6) {
 
 let totpSecret = "";
 
-document.getElementById("generate-secret-btn").addEventListener("click", () => {
-  const username = document.getElementById("totp-username").value.trim();
-  if (username === "") {
-    alert("Please enter a username");
-    return;
-  }
+/*document.getElementById("generate-secret-btn").addEventListener("click", () => {*/
+/*const username = document.getElementById("totp-username").value.trim();*/
+/*if (username === "") {*/
+/*alert("Please enter a username");*/
+/*return;*/
+/*}*/
 
-  totpSecret = btoa(username + Date.now()).substring(0, 16);
-  document.getElementById("totp-secret-display").innerText =
-    `Secret: ${totpSecret}`;
-  document.getElementById("generate-totp-btn").disabled = false;
-  document.getElementById("validate-totp-btn").disabled = false;
-});
+/*totpSecret = btoa(username + Date.now()).substring(0, 16);*/
+/*document.getElementById("totp-secret-display").innerText =*/
+/*`Secret: ${totpSecret}`;*/
+/*document.getElementById("generate-totp-btn").disabled = false;*/
+/*document.getElementById("validate-totp-btn").disabled = false;*/
+/*});*/
 
 async function displayTOTP() {
   console.log("here");
@@ -123,8 +123,8 @@ function decodeOnce(codeReader, selectedDeviceId) {
   codeReader
     .decodeFromInputVideoDevice(selectedDeviceId, "video")
     .then((result) => {
-      console.log(result);
-      document.getElementById("result").textContent = result.text;
+      const data = JSON.parse(result.text);
+      openModal(data.user);
     })
     .catch((err) => {
       console.error(err);
@@ -138,9 +138,8 @@ function decodeContinuously(codeReader, selectedDeviceId) {
     "video",
     (result, err) => {
       if (result) {
-        // properly decoded qr code
-        console.log("Found QR code!", result);
-        document.getElementById("result").textContent = result.text;
+        const data = JSON.parse(result.text);
+        openModal(data.user);
       }
 
       if (err) {
@@ -218,3 +217,22 @@ window.addEventListener("load", function() {
       console.error(err);
     });
 });
+
+function openModal(username) {
+  const modal = document.getElementById("user-modal");
+  modal.style.display = "block";
+
+  document.getElementById("username").textContent = username;
+
+  const closeModalBtn = document.getElementById("closeModalBtn");
+  closeModalBtn.onclick = function() {
+    modal.style.display = "none";
+  };
+}
+
+window.onclick = function(event) {
+  const modal = document.getElementById("user-modal");
+  if (event.target === modal) {
+    modal.style.display = "none";
+  }
+};
