@@ -196,13 +196,14 @@ window.addEventListener("load", function() {
       }
 
       document.getElementById("startButton").addEventListener("click", () => {
-        const decodingStyle = document.getElementById("decoding-style").value;
+        /*const decodingStyle = document.getElementById("decoding-style").value;*/
+        decodeContinuously(codeReader, selectedDeviceId);
 
-        if (decodingStyle == "once") {
-          decodeOnce(codeReader, selectedDeviceId);
-        } else {
-          decodeContinuously(codeReader, selectedDeviceId);
-        }
+        /*        if (decodingStyle == "once") {*/
+        /*decodeOnce(codeReader, selectedDeviceId);*/
+        /*} else {*/
+        /*decodeContinuously(codeReader, selectedDeviceId);*/
+        /*}*/
 
         console.log(`Started decode from camera with id ${selectedDeviceId}`);
       });
